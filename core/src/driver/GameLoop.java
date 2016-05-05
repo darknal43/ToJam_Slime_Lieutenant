@@ -1,24 +1,27 @@
 package driver;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import state.stateManager.ScreenShell;
 
 /**
  * This is the primary driver class for this game.
  *
  * Created by Hongyu Wang on 5/5/2016.
  */
-public class GameLoop extends ApplicationAdapter {
+class GameLoop extends Game {
     SpriteBatch batch;
     Texture img;
 
     @Override
     public void create () {
+
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
+
     }
 
     @Override
@@ -34,5 +37,6 @@ public class GameLoop extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         img.dispose();
+        ScreenShell.dispose();
     }
 }
