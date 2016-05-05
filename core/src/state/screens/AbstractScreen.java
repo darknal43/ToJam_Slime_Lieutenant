@@ -1,7 +1,6 @@
 package state.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
@@ -32,14 +31,14 @@ public abstract class AbstractScreen implements Screen {
         disposables.clear();
         stage = new Stage();
         disposables.add(stage);
-        initSubclass();
+        subclassInit();
     }
 
 
     /**
      * All disposable assets should be created here.
      */
-    protected abstract void initSubclass();
+    protected abstract void subclassInit();
 
 
     /**
@@ -68,8 +67,6 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void show() {
         init();
-
-        InputMultiplexer im = new InputMultiplexer();
 
         Gdx.input.setInputProcessor(stage);
 

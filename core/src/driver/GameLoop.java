@@ -18,9 +18,7 @@ class GameLoop extends Game {
 
     @Override
     public void create () {
-
-        batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
+        ScreenShell.GAME_SCREEN.setAsScreen();
 
     }
 

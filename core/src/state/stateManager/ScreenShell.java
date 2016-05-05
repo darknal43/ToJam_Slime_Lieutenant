@@ -41,7 +41,7 @@ public enum ScreenShell {
     }
 
 
-    public void setScreen(){
+    public void setAsScreen(){
         game.setScreen(screen);
     }
 
