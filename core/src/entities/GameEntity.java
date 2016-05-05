@@ -11,7 +11,7 @@ public class GameEntity extends Actor {
 
     @Override
     public boolean fire(Event event) {
-        System.out.println(event.getClass());
+        System.out.println(event.getClass().getCanonicalName());
         return false;
     }
 }
