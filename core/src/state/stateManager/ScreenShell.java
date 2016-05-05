@@ -23,7 +23,7 @@ public enum ScreenShell {
     private Game game;
 
     ScreenShell(String name){
-        this.name = "state.screens"+name;
+        this.name = "state.screens."+name;
         init();
     }
 
