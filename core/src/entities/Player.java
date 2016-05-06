@@ -1,20 +1,20 @@
 package entities;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import tools.Constants;
-import tools.WorldFactory;
 
 /**
  *
  * Created by Hongyu Wang on 5/5/2016.
  */
 public class Player extends GameEntity {
-
-
+    private float mouseX, mouseY;
+    private InputHandler inputHandler;
 
     public Player(String spriteFilePath){
         super(spriteFilePath);
@@ -22,20 +22,25 @@ public class Player extends GameEntity {
 
     }
 
+    @Override
+    protected void init() {
+        super.init();
+        inputHandler = new InputHandler(this);
+    }
 
 
+    public void shoot(){
+
+    }
 
 
     //------------EVENT HANDLERS ------------------------------------------------------
     @Override
     public boolean fire(Event event) {
 
-        return InputHandler.handleInput(event);
+        return inputHandler.handleInput(event);
     }
 
-
-
-    //---------------------------------------------------------------------------------
 
 
     //-------- Your Update Loops ------------------------------------------------------
@@ -60,24 +65,59 @@ public class Player extends GameEntity {
         return super.remove();
     }
 
-    static class InputHandler implements Constants {
-        static boolean handleInput(Event event){
-            return DESKTOP ? windowsHandleInput(event) : phoneHandleInput(event);
 
-        }
-
-
-        static boolean windowsHandleInput(Event event){
-            //TODO HandleInput
-            return true;
-        }
-
-        static boolean phoneHandleInput(Event event){
-            throw new UnsupportedClassVersionError();
-        }
+    public void setMouseLocation(float x, float y){
+        this.mouseX = x;
+        this.mouseY = y;
     }
+
 
 }
 
 
 
+class InputHandler implements Constants {
+    private Player player;
+
+    public InputHandler(Player player){
+        this.player = player;
+    }
+
+    boolean handleInput(Event event){
+
+        return event instanceof InputEvent && Gdx.app.getType() == Application.ApplicationType.Desktop
+                ? windowsHandleInput((InputEvent)event) : phoneHandleInput(event);
+    }
+
+
+    boolean windowsHandleInput(InputEvent event){
+
+        //This handles movement.
+        if (event.getType() == InputEvent.Type.mouseMoved){
+            player.setMouseLocation(event.getStageX(), event.getStageY());
+            return true;
+        }
+
+        //This handles keyboard commands
+        if (event.getType() == InputEvent.Type.keyDown){
+            switch (event.getKeyCode()){
+                //This is
+                case Input.Keys.SPACE : player.shoot();
+                    return true;
+
+
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * This should never be used for now
+     * @param event The event to be handled
+     * @return If it was handled or not.
+     */
+    boolean phoneHandleInput(Event event){
+        throw new UnsupportedClassVersionError();
+    }
+}

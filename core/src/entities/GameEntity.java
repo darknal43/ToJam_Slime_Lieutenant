@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import tools.WorldFactory;
@@ -15,26 +14,47 @@ import tools.WorldFactory;
  * Created by Hongyu Wang on 5/5/2016.
  */
 public abstract class GameEntity extends Actor {
+    /**
+     * This is the current sprite of the actor
+     */
     protected Sprite sprite;
+
+
     protected Body body;
+
+    protected Array<Disposable> disposables;
+
+
+    /**
+     * This is the assets of the array that we're using.
+     */
     protected Array<? extends TextureRegion> assets;
+
+
     protected World world;
 
 
     public GameEntity(String spriteFilePath){
-        this(spriteFilePath, 0, 0, 0, 0);
+        this(spriteFilePath, 0, 0, 100, 100);
     }
 
 
     public GameEntity(String spriteFilePath, float x, float y, float width, float height){
+
+        if (width == 0 || height == 0)
+            throw new IllegalStateException("Game Entity Dimensions Cannot Be Zero");
+
         setBounds(x, y, width, height);
+
         init();
+
         initSprite(spriteFilePath);
     }
 
     protected void init(){
         assets = new Array<>();
         world = WorldFactory.getWorld();
+        disposables = new Array<>();
         initBox2D();
 
 
@@ -42,9 +62,10 @@ public abstract class GameEntity extends Actor {
 
     private void initSprite(String spriteFilePath){
         Texture texture = new Texture(spriteFilePath);
+        disposables.add(texture);
         sprite = new Sprite(texture);
-        sprite.setSize(100, 100);
-        sprite.setOrigin(getOriginX(), getOriginY());
+        sprite.setBounds(getX(), getY(), getWidth(), getHeight());
+
     }
 
 
@@ -56,7 +77,7 @@ public abstract class GameEntity extends Actor {
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        shape.setAsBox(getWidth(), getHeight());
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -70,6 +91,12 @@ public abstract class GameEntity extends Actor {
 
     @Override
     public boolean remove() {
+        for (Disposable disposable : disposables){
+            disposable.dispose();
+        }
         return super.remove();
     }
+
+
+
 }
