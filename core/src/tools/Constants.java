@@ -1,5 +1,7 @@
 package tools;
 
+import com.badlogic.gdx.Gdx;
+
 /**
  * This is the main constants interface.
  *
@@ -9,10 +11,8 @@ package tools;
 public interface Constants {
 
 
-    /**
-     * This is the scale control.
-     */
     float SCALE = 0.5F;
+
 
 
     float WIDTH = 1920*SCALE;

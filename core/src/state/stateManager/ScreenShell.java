@@ -63,9 +63,7 @@ public enum ScreenShell {
     }
 
     public static void dispose(){
-        for (ScreenShell screenShell : ScreenShell.values()){
-            screenShell.screen.dispose();
-        }
+
         WorldFactory.getWorld().dispose();
     }
 }

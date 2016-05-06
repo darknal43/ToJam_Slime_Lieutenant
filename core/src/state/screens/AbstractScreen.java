@@ -3,10 +3,13 @@ package state.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import tools.Constants;
 import tools.WorldFactory;
 
@@ -19,26 +22,41 @@ import tools.WorldFactory;
  */
 public abstract class AbstractScreen implements Screen, Constants {
 
-    private float totalDelta;
-
     protected World world;
 
     protected Stage stage;
 
     protected Array<Disposable> disposables;
 
-
+    private Viewport viewport;
 
     public AbstractScreen(){
         disposables = new Array<>();
         world = WorldFactory.getWorld();
 
-        init();
     }
 
     private void init(){
         disposables.clear();
-        stage = new Stage();
+        stage = new Stage(){
+            @Override
+            public boolean mouseMoved(int screenX, int screenY) {
+                if (getKeyboardFocus() == null) return false;
+
+                Vector2 screenInfo = new Vector2(screenX, screenY);
+                Vector2 stageInfo = this.screenToStageCoordinates(screenInfo);
+
+                InputEvent mouseMovedEvent = new InputEvent();
+                mouseMovedEvent.setType(InputEvent.Type.mouseMoved);
+                mouseMovedEvent.setStage(this);
+                mouseMovedEvent.setStageX(stageInfo.x);
+                mouseMovedEvent.setStageY(stageInfo.y);
+
+
+                getKeyboardFocus().fire(mouseMovedEvent);
+                return super.mouseMoved(screenX, screenY);
+            }
+        };
         disposables.add(stage);
         subclassInit();
     }
@@ -79,12 +97,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     @Override
     public void render(float delta) {
         draw();
-
-        totalDelta += delta;
-        if (totalDelta >= 1F/FRAME_RATE) {
-            update(delta);
-            totalDelta = 0;
-        }
+        update(delta);
 
     }
 
@@ -98,9 +111,6 @@ public abstract class AbstractScreen implements Screen, Constants {
 
     @Override
     public void resize(int width, int height) {
-        //TODO We need to maintain an aspect ratio.
-        //Consider making this resizeable??
-
 
     }
 

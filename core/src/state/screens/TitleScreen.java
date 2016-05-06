@@ -5,7 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import state.stateManager.ScreenShell;
 import tools.Constants;
 
 /**
@@ -57,7 +61,7 @@ public class TitleScreen extends AbstractScreen implements Constants {
             disposables.add(texture);
         }
 
-        gridAnimation = new Animation(1F/12, textures);
+        gridAnimation = new Animation(1F/16, textures);
     }
 
     private static Animation setUpAnimation(TextureAtlas textureAtlas, float frameRate){
@@ -85,10 +89,20 @@ public class TitleScreen extends AbstractScreen implements Constants {
         greenTitle = new Image(texture = new Texture("menuTitle\\mainTitleGreen.png"));
         disposables.add(texture);
 
-        greenTitle.setBounds(realWidth-2, realHeight, texture.getWidth() * SCALE, texture.getHeight() * SCALE);
+        greenTitle.setBounds(realWidth - 2, realHeight, texture.getWidth() * SCALE, texture.getHeight() * SCALE);
 
         stage.addActor(greenTitle);
         stage.addActor(magentaTitle);
+
+        magentaTitle.addListener((Event e) -> {
+            if (e instanceof InputEvent && ((InputEvent)e).getType() == InputEvent.Type.touchDown) {
+                ScreenShell.GAME_SCREEN.setAsScreen();
+                return true;
+            }
+
+
+            return false;
+        });
     }
 
 
@@ -123,21 +137,22 @@ public class TitleScreen extends AbstractScreen implements Constants {
     private void drawSlimes(){
         for (int i = 0; i < 4; i ++) {
             TextureRegion region;
+            float heightStretch = 1.5F;
             spriteBatch.draw(
                     region = glowAnimation.getKeyFrame(stateTime, true),
                     i * WIDTH / 4,
                     0,
                     region.getRegionWidth() * SCALE,
-                    region.getRegionHeight() * SCALE
+                    region.getRegionHeight() * SCALE * heightStretch
             );
 
             region.flip(false, true);
             spriteBatch.draw(
                     region,
                     i * WIDTH / 4,
-                    HEIGHT - region.getRegionHeight() * SCALE,
+                    HEIGHT - region.getRegionHeight() * heightStretch * SCALE,
                     region.getRegionWidth() * SCALE,
-                    region.getRegionHeight() * SCALE
+                    region.getRegionHeight() * SCALE * heightStretch
             );
             region.flip(false, true);
             spriteBatch.draw(
@@ -145,7 +160,7 @@ public class TitleScreen extends AbstractScreen implements Constants {
                     i * WIDTH / 4,
                     0,
                     region.getRegionWidth() * SCALE,
-                    region.getRegionHeight()*SCALE
+                    region.getRegionHeight()*SCALE * heightStretch
             );
 
 
@@ -153,9 +168,9 @@ public class TitleScreen extends AbstractScreen implements Constants {
             spriteBatch.draw(
                     region,
                     i * WIDTH / 4,
-                    HEIGHT - region.getRegionHeight() * SCALE,
+                    HEIGHT - region.getRegionHeight() * heightStretch * SCALE,
                     region.getRegionWidth()*SCALE,
-                    region.getRegionHeight()*SCALE
+                    region.getRegionHeight()*SCALE * heightStretch
             );
             region.flip(false, true);
         }

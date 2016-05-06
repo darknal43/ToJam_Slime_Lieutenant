@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import tools.Constants;
@@ -16,8 +17,12 @@ public class Player extends GameEntity {
     private float mouseX, mouseY;
     private InputHandler inputHandler;
 
+
+
     public Player(String spriteFilePath){
         super(spriteFilePath);
+
+
 
 
     }
@@ -26,6 +31,8 @@ public class Player extends GameEntity {
     protected void init() {
         super.init();
         inputHandler = new InputHandler(this);
+        mouseX = getX();
+        mouseY = getY();
     }
 
 
@@ -37,9 +44,9 @@ public class Player extends GameEntity {
     //------------EVENT HANDLERS ------------------------------------------------------
     @Override
     public boolean fire(Event event) {
-
         return inputHandler.handleInput(event);
     }
+
 
 
 
@@ -49,7 +56,11 @@ public class Player extends GameEntity {
         super.act(delta);
         sprite.setX(getX());
         sprite.setY(getY());
+        //System.out.println(this.getClass()+"-> " + mouseX + " " + mouseY);
     }
+
+
+
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -83,18 +94,19 @@ class InputHandler implements Constants {
         this.player = player;
     }
 
-    boolean handleInput(Event event){
+    public boolean handleInput(Event event){
 
-        return event instanceof InputEvent && Gdx.app.getType() == Application.ApplicationType.Desktop
-                ? windowsHandleInput((InputEvent)event) : phoneHandleInput(event);
+        return event instanceof InputEvent && (Gdx.app.getType() == Application.ApplicationType.Desktop
+                ? windowsHandleInput((InputEvent)event) : phoneHandleInput(event));
     }
 
 
-    boolean windowsHandleInput(InputEvent event){
+    public boolean windowsHandleInput(InputEvent event){
 
         //This handles movement.
         if (event.getType() == InputEvent.Type.mouseMoved){
             player.setMouseLocation(event.getStageX(), event.getStageY());
+
             return true;
         }
 
@@ -121,3 +133,4 @@ class InputHandler implements Constants {
         throw new UnsupportedClassVersionError();
     }
 }
+

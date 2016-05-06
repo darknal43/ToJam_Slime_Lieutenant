@@ -31,6 +31,6 @@ public class GameLoop extends Game {
     @Override
     public void dispose() {
 
-        ScreenShell.dispose();
+        screen.dispose();
     }
 }
