@@ -33,7 +33,8 @@ public enum ScreenShell {
         try {
             screen = (Screen)Class.forName(name).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            System.out.println(name + " is not initialized properly");
+
+            System.out.println(this.getClass() + "-> " + name + " is not initialized properly");
         }
 
 
