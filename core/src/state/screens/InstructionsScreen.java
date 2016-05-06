@@ -4,7 +4,7 @@ package state.screens;
  *
  * Created by Hongyu Wang on 5/5/2016.
  */
-public class LevelSelectionScreen extends AbstractScreen {
+public class InstructionsScreen extends AbstractScreen {
     @Override
     protected void subclassInit() {
 

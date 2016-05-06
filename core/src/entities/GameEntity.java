@@ -9,5 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.Event;
  */
 public abstract class GameEntity extends Actor {
 
+    public GameEntity(){
+        this(0, 0, 0, 0);
+    }
+
+
+
+    public GameEntity(float x, float y, float width, float height){
+
+    }
+
 
 }

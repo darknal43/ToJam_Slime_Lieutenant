@@ -11,7 +11,7 @@ import driver.GameLoopFactory;
 public enum ScreenShell {
 
     TITLE_SCREEN("TitleScreen"),
-    LEVEL_SELECTION_SCREEN("LevelSelectionScreen"),
+    LEVEL_SELECTION_SCREEN("InstructionsScreen"),
     GAME_SCREEN("GameScreen"),
     END_SCREEN("EndScreen");
 
