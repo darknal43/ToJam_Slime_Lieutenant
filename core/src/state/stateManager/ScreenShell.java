@@ -18,16 +18,16 @@ public enum ScreenShell {
 
     private String name;
     private Screen screen;
-
-
     private Game game;
+
 
     ScreenShell(String name){
         this.name = "state.screens."+name;
-        init();
     }
 
-
+    /**
+     * This is the creation of the pages.
+     */
     private void init(){
 
         try {
@@ -50,6 +50,19 @@ public enum ScreenShell {
         for (ScreenShell screenShell : ScreenShell.values()){
             screenShell.screen.dispose();
         }
+    }
+
+    /**
+     * This method should be called.`3
+     */
+    public static void initiate(){
+
+        for (ScreenShell screenShell : ScreenShell.values()){
+            screenShell.init();
+        }
+
+
+        ScreenShell.TITLE_SCREEN.setAsScreen();
     }
 
 

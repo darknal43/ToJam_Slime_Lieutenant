@@ -14,7 +14,7 @@ public class GameLoop extends Game {
 
     @Override
     public void create () {
-        ScreenShell.TITLE_SCREEN.setAsScreen();
+        ScreenShell.initiate();
 
 
     }
