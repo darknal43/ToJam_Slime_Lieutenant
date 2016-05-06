@@ -25,6 +25,8 @@ public interface Constants {
 
     float HEIGHT = 1080*SCALE;
 
+    float FRAME_RATE = 60;
+
 
 }
 

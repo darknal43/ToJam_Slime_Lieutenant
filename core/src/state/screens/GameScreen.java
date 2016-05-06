@@ -20,13 +20,17 @@ public class GameScreen extends AbstractScreen{
     protected void subclassInit() {
 
         GameEntity player;
-        stage.addActor(player = new Player());
+        stage.addActor(player = new Player("badlogic.jpg"));
         stage.setKeyboardFocus(player);
 
     }
 
+    @Override
+    protected void update(float delta) {
+        super.update(delta);
 
 
+    }
 }
 
 

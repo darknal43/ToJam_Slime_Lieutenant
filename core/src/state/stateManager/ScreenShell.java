@@ -3,6 +3,7 @@ package state.stateManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import driver.GameLoopFactory;
+import tools.WorldFactory;
 
 /**
  *
@@ -46,11 +47,7 @@ public enum ScreenShell {
         game.setScreen(screen);
     }
 
-    public static void dispose(){
-        for (ScreenShell screenShell : ScreenShell.values()){
-            screenShell.screen.dispose();
-        }
-    }
+
 
     /**
      * This method should be called.`3
@@ -65,5 +62,10 @@ public enum ScreenShell {
         ScreenShell.TITLE_SCREEN.setAsScreen();
     }
 
-
+    public static void dispose(){
+        for (ScreenShell screenShell : ScreenShell.values()){
+            screenShell.screen.dispose();
+        }
+        WorldFactory.getWorld().dispose();
+    }
 }

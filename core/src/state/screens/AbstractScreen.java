@@ -3,11 +3,12 @@ package state.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import tools.Constants;
 import tools.WorldFactory;
-
-import java.util.ArrayList;
 
 /**
  * This is the primary screen superclass.
@@ -16,16 +17,22 @@ import java.util.ArrayList;
  *
  * Created by Hongyu Wang on 5/5/2016.
  */
-public abstract class AbstractScreen implements Screen {
+public abstract class AbstractScreen implements Screen, Constants {
+
+    private float totalDelta;
+
+    protected World world;
 
     protected Stage stage;
 
-    protected ArrayList<Disposable> disposables;
+    protected Array<Disposable> disposables;
 
 
 
     public AbstractScreen(){
-        disposables = new ArrayList<>();
+        disposables = new Array<>();
+        world = WorldFactory.getWorld();
+
         init();
     }
 
@@ -59,7 +66,10 @@ public abstract class AbstractScreen implements Screen {
      * @param delta the change in delta time.
      */
     protected void update(float delta) {
+
         stage.act(delta);
+
+
     }
 
 
@@ -69,7 +79,13 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public void render(float delta) {
         draw();
-        update(delta);
+
+        totalDelta += delta;
+        if (totalDelta >= 1F/FRAME_RATE) {
+            update(delta);
+            totalDelta = 0;
+        }
+
     }
 
     @Override
@@ -82,7 +98,8 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        //We need to maintain an aspect ratio.
+        //TODO We need to maintain an aspect ratio.
+        //Consider making this resizeable??
 
 
     }
