@@ -8,12 +8,6 @@ package tools;
  */
 public interface Constants {
 
-    /**
-     * This is the boolean for setup on phone vs desktop.
-     *
-     * This is probably useless for now.
-     */
-    boolean DESKTOP = true;
 
     /**
      * This is the scale control.
