@@ -1,12 +1,11 @@
 package entities;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.graphics.Texture;
+import tools.Constants;
 import tools.WorldFactory;
 
 /**
@@ -63,17 +62,11 @@ public class Player extends GameEntity {
     @Override
     public boolean fire(Event event) {
 
-        return event instanceof InputEvent && handleInput((InputEvent)event);
+        return InputHandler.handleInput(event);
     }
 
-    private boolean handleInput(InputEvent event) {
-        if (event.getType() != InputEvent.Type.keyDown)
-            return false;
 
 
-
-        return true;
-    }
     //---------------------------------------------------------------------------------
 
 
@@ -98,5 +91,25 @@ public class Player extends GameEntity {
         texture.dispose();
         return super.remove();
     }
+
+    static class InputHandler implements Constants {
+        static boolean handleInput(Event event){
+            return DESKTOP ? windowsHandleInput(event) : phoneHandleInput(event);
+
+        }
+
+
+        static boolean windowsHandleInput(Event event){
+            //TODO HandleInput
+            return true;
+        }
+
+        static boolean phoneHandleInput(Event event){
+            throw new UnsupportedClassVersionError();
+        }
+    }
+
 }
+
+
 

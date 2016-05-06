@@ -13,7 +13,7 @@ public final class WorldFactory {
 
     public static World getWorld(){
         if (world == null){
-            world = new World(new Vector2(0, -98F), true);
+            world = new World(new Vector2(), true);
         }
         return world;
     }
