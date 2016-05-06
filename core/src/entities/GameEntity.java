@@ -57,6 +57,7 @@ public abstract class GameEntity extends Actor {
         assets = new Array<>();
         world = WorldFactory.getWorld();
         disposables = new Array<>();
+        travelVector = new Vector2(0, 0);
         initBox2D();
 
 
