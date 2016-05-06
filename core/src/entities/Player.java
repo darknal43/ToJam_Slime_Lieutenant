@@ -13,49 +13,17 @@ import tools.WorldFactory;
  * Created by Hongyu Wang on 5/5/2016.
  */
 public class Player extends GameEntity {
-    private Texture texture;
-    private Sprite sprite;
-    private Body body;
-    private World world;
 
 
-    public Player(){
-        world = WorldFactory.getWorld();
+
+    public Player(String spriteFilePath){
+        super(spriteFilePath);
 
 
-        initSprite();
-
-        initBox2D();
     }
 
-    //----------Init methods -------------------------
-
-    private void initSprite(){
-        texture = new Texture("badlogic.jpg");
-        sprite = new Sprite(texture);
-        setBounds(50, 50, 100, 100);
-        sprite.setSize(100, 100);
-        sprite.setOrigin(getOriginX(), getOriginY());
-    }
-
-    private void initBox2D(){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX(), getY());
-        body = world.createBody(bodyDef);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(sprite.getWidth() / 2, sprite.getHeight() / 2);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1;
 
 
-        body.createFixture(fixtureDef);
-
-        shape.dispose();
-    }
 
 
     //------------EVENT HANDLERS ------------------------------------------------------
@@ -88,7 +56,7 @@ public class Player extends GameEntity {
 
     @Override
     public boolean remove() {
-        texture.dispose();
+
         return super.remove();
     }
 
