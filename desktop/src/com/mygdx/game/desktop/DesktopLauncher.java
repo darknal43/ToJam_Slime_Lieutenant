@@ -15,7 +15,7 @@ public class DesktopLauncher implements Constants {
 		config.width = (int)(WIDTH);
 		config.height = (int)(HEIGHT);
 		config.title = "Slime - Combat Evolved";
-		config.samples = 8;
+
 		new LwjglApplication(GameLoopFactory.getMainGameLoop(), config);
 	}
 }

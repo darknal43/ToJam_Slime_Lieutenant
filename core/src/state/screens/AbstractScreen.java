@@ -138,7 +138,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     }
 
     public void updateCamera(Vector2 travelVector) {
-        //stage.getCamera().position.set(new Vector3(travelVector, 0));
+        stage.getCamera().position.set(new Vector3(travelVector, 0));
 
     }
 }

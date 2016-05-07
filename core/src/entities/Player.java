@@ -4,7 +4,10 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -23,13 +26,20 @@ public class Player extends GameEntity {
     private InputHandler inputHandler;
     private Vector2 currentLocation;
     private Vector2 targetLocation;
+    private Animation animation;
+    private Animation specialEffects;
 
+    private float totalDelta;
 
     public Player(String spriteFilePath){
         super(spriteFilePath);
+        TextureAtlas textureAtlas = new TextureAtlas("player\\baseAnimation-packed\\pack.atlas");
 
-
-
+        this.assets = textureAtlas.createSprites();
+        specialEffects = new Animation();
+        animation = new Animation(1F/6, assets);
+        animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+        totalDelta = 0;
     }
 
     @Override
@@ -54,14 +64,25 @@ public class Player extends GameEntity {
 
 
     private void move(){
-        float speed = 10;
+        float speed = 5;
         travelVector.setLength(speed);
         this.addAction(Actions.moveBy(travelVector.x, travelVector.y, 1));
+
     }
 
-    private void updateActor(){
-        currentLocation.set(getX(), getY());
+    private void updateSprite(float delta){
+        sprite = (Sprite)animation.getKeyFrame(totalDelta);
         sprite.setPosition(getX(), getY());
+        sprite.setOriginCenter();
+        sprite.setRotation(travelVector.angle());
+        totalDelta += delta;
+    }
+
+
+
+
+    private void updateActor() {
+        currentLocation.set(getX(), getY());
         GameLoopFactory.getMainGameLoop().updateCamera(currentLocation);
     }
 
@@ -69,9 +90,9 @@ public class Player extends GameEntity {
     @Override
     public void act(float delta) {
         move();
-        super.act(delta);
         updateActor();
-
+        updateSprite(delta);
+        super.act(delta);
     }
 
 
