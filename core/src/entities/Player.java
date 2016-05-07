@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import driver.GameLoop;
 import driver.GameLoopFactory;
 import tools.Constants;
@@ -19,7 +21,9 @@ import tools.Constants;
  */
 public class Player extends GameEntity {
     private InputHandler inputHandler;
-    private Vector2 targetVector;
+    private Vector2 currentLocation;
+    private Vector2 targetLocation;
+
 
     public Player(String spriteFilePath){
         super(spriteFilePath);
@@ -32,7 +36,8 @@ public class Player extends GameEntity {
     protected void init() {
         super.init();
         inputHandler = new InputHandler(this);
-        targetVector = new Vector2().setToRandomDirection().setLength(100);
+        currentLocation = new Vector2(getX(), getY());
+        targetLocation = new Vector2().setToRandomDirection();
     }
 
 
@@ -48,28 +53,25 @@ public class Player extends GameEntity {
     }
 
 
+    private void move(){
+        float speed = 10;
+        travelVector.setLength(speed);
+        this.addAction(Actions.moveBy(travelVector.x, travelVector.y, 1));
+    }
 
-    private void updateActorInfo(){
-
-
-
-
-        body.setLinearVelocity(targetVector);
-        setPosition(body.getPosition().x + sprite.getWidth() / 2, body.getPosition().y + sprite.getHeight() / 2);
-
-        GameLoopFactory.getMainGameLoop().updateCamera(new Vector2(getX(), getY()));
-        
-
-        sprite.setPosition(body.getPosition().x, body.getPosition().y);
-
-
+    private void updateActor(){
+        currentLocation.set(getX(), getY());
+        sprite.setPosition(getX(), getY());
+        GameLoopFactory.getMainGameLoop().updateCamera(currentLocation);
     }
 
     //-------- Your Update Loops ------------------------------------------------------
     @Override
     public void act(float delta) {
+        move();
         super.act(delta);
-        updateActorInfo();
+        updateActor();
+
     }
 
 
@@ -78,7 +80,8 @@ public class Player extends GameEntity {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        sprite.draw(batch, parentAlpha);
+
+        sprite.draw(batch);
     }
 
     //------------------------------------------------------------------------------------
@@ -91,8 +94,9 @@ public class Player extends GameEntity {
 
 
     public void setMouseLocation(float x, float y){
-        targetVector = new Vector2(x - getX(), y - getY()).setLength(1000);
+        targetLocation = new Vector2(x, y);
 
+        travelVector = targetLocation.sub(currentLocation);
     }
 
 
@@ -119,7 +123,6 @@ class InputHandler implements Constants {
         //This handles movement.
         if (event.getType() == InputEvent.Type.mouseMoved){
             player.setMouseLocation(event.getStageX(), event.getStageY());
-
             return true;
         }
 

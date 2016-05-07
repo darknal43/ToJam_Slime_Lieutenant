@@ -3,6 +3,7 @@ package state.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
@@ -104,7 +105,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     @Override
     public void show() {
         init();
-
+        ((OrthographicCamera)stage.getCamera()).zoom = 5F;
         Gdx.input.setInputProcessor(stage);
 
     }
@@ -137,7 +138,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     }
 
     public void updateCamera(Vector2 travelVector) {
-        stage.getCamera().position.lerp(new Vector3(travelVector, 0), 0.2F);
+        //stage.getCamera().position.set(new Vector3(travelVector, 0));
 
     }
 }
