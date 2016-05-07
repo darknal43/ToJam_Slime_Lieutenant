@@ -1,7 +1,5 @@
 package tools;
 
-import com.badlogic.gdx.Gdx;
-
 /**
  * This is the main constants interface.
  *

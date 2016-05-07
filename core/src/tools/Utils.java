@@ -1,7 +1,5 @@
 package tools;
 
-import entities.Player;
-
 /**
  * Created by Hairuo on 2016-05-06.
  */

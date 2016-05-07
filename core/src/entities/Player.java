@@ -3,20 +3,15 @@ package entities;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import driver.GameLoop;
-import driver.GameLoopFactory;
-import state.screens.AbstractScreen;
+import state.screens.GameScreen;
 import tools.Constants;
 
 /**
@@ -29,6 +24,9 @@ public class Player extends GameEntity {
     private Vector2 targetLocation;
     private Animation animation;
     private Animation specialEffects;
+
+    //TODO Adjust this value based on size?
+    private float speed = 10;
 
     private float totalDelta;
 
@@ -65,7 +63,7 @@ public class Player extends GameEntity {
 
 
     private void move(){
-        float speed = 5;
+
         travelVector.setLength(speed);
         this.addAction(Actions.moveBy(travelVector.x, travelVector.y, 1));
 
@@ -84,7 +82,7 @@ public class Player extends GameEntity {
 
     private void updateActor() {
         currentLocation.set(getX(), getY());
-        AbstractScreen.CameraManager.updateCamera(currentLocation);
+        GameScreen.CameraManager.updateCamera(currentLocation);
     }
 
     //-------- Your Update Loops ------------------------------------------------------

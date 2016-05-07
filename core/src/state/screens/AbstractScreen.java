@@ -1,21 +1,17 @@
 package state.screens;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import driver.GameLoopFactory;
 import tools.Constants;
 import tools.WorldFactory;
 
-import java.util.Vector;
 
 /**
  * This is the primary screen superclass.
@@ -30,6 +26,9 @@ public abstract class AbstractScreen implements Screen, Constants {
 
     protected Stage stage;
 
+    protected InputMultiplexer inputMultiplexer;
+
+
     protected Array<Disposable> disposables;
 
 
@@ -37,7 +36,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     public AbstractScreen(){
         disposables = new Array<>();
         world = WorldFactory.getWorld();
-
+        inputMultiplexer = new InputMultiplexer();
     }
 
 
@@ -71,6 +70,8 @@ public abstract class AbstractScreen implements Screen, Constants {
                 return super.mouseMoved(screenX, screenY);
             }
         };
+
+        inputMultiplexer.addProcessor(stage);
         disposables.add(stage);
         subclassInit();
     }
@@ -116,9 +117,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     @Override
     public void show() {
         init();
-        ((OrthographicCamera)stage.getCamera()).zoom = 1F;
-        Gdx.input.setInputProcessor(new InputMultiplexer(CameraManager.getInputManager(), stage));
-
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -153,59 +152,7 @@ public abstract class AbstractScreen implements Screen, Constants {
     }
 
 
-    /**
-     * This is an internal static CameraManager class
-     */
-    static public class CameraManager extends InputAdapter{
-        static InputAdapter inputManager;
-        private static OrthographicCamera getCamera(){
-            AbstractScreen screen = (AbstractScreen) GameLoopFactory.getMainGameLoop().getScreen();
 
-            return (OrthographicCamera)(screen).getStage().getCamera();
-        }
-
-        public static void updateCamera(Vector2 travelVector){
-
-            getCamera().position.set(new Vector3(travelVector, 0));
-        }
-
-        public static void resetCameraRatio(){
-            getCamera().zoom = 1;
-        }
-
-        public static void zoom(int dir){
-            System.out.println(getCamera().zoom);
-            if (dir < 0 && getCamera().zoom <= 0.4F || dir > 0 && getCamera().zoom >= 4F)
-                return;
-            getCamera().zoom += .2F*dir;
-        }
-
-        static InputAdapter getInputManager(){
-            if (inputManager == null){
-                inputManager = new CameraManager();
-            }
-
-            return inputManager;
-        }
-
-
-        @Override
-        public boolean scrolled(int amount) {
-            zoom(amount > 0 ? 1 : -1);
-            return true;
-        }
-
-        @Override
-        public boolean keyDown(int keycode) {
-            if (keycode == Input.Keys.R){
-                resetCameraRatio();
-                return true;
-            }
-
-            return false;
-        }
-
-    }
 
 
 }
