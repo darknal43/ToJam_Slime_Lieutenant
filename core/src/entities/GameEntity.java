@@ -38,6 +38,7 @@ public abstract class GameEntity extends Actor {
 
     public GameEntity(String spriteFilePath){
         this(spriteFilePath, 0, 0, 100, 100);
+        init();
     }
 
 

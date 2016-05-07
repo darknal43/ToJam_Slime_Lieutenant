@@ -33,7 +33,10 @@ public class Projectile extends GameEntity {
         this.size = size;
         this.player = player;
         this.returning = false;
+        this.turnSpeed = 1;
         setRotation(0);
+        initSprites();
+
 
 
     }
@@ -44,25 +47,6 @@ public class Projectile extends GameEntity {
         setBounds(50, 50, 100, 100);
         sprite.setSize(100, 100);
         sprite.setOrigin(getOriginX(), getOriginY());
-    }
-
-    public void initBox2D(){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX(), getY());
-        body = world.createBody(bodyDef);
-
-        CircleShape hitbox = new CircleShape();
-        hitbox.setRadius(size);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = hitbox;
-        fixtureDef.density = 1;
-
-        body.createFixture(fixtureDef);
-
-        hitbox.dispose();
-
     }
 
 
@@ -84,6 +68,7 @@ public class Projectile extends GameEntity {
      */
     public void move(){
 
+
         float toTarget = Vector2.dst(targetX, targetY, this.getX(), this.getY());
         float incrementDistance = (float)Math.hypot(xVelo, yVelo);
 
@@ -98,12 +83,11 @@ public class Projectile extends GameEntity {
 
         this.setRotation(Utils.track(targetX, targetY, this.getX(), this.getY(),this.getRotation(), turnSpeed));
 
-        this.xVelo =  (float)Math.sin(Math.toRadians(this.getRotation())) * speed;
-        this.yVelo =  (float)Math.cos(Math.toRadians(this.getRotation())) * speed;
+        travelVector = new Vector2().setLength(speed).setAngle(this.getRotation());
 
-        this.setX(this.getX() + xVelo);
-        this.setX(this.getY() + yVelo);
 
+        this.setX(this.getX() + travelVector.x);
+        this.setX(this.getY() + travelVector.y);
 
 
     }
