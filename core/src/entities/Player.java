@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import driver.GameLoop;
 import driver.GameLoopFactory;
+import state.screens.AbstractScreen;
 import tools.Constants;
 
 /**
@@ -36,8 +37,8 @@ public class Player extends GameEntity {
         TextureAtlas textureAtlas = new TextureAtlas("player\\baseAnimation-packed\\pack.atlas");
 
         this.assets = textureAtlas.createSprites();
-        specialEffects = new Animation();
-        animation = new Animation(1F/6, assets);
+
+        animation = new Animation(1F/12, assets);
         animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
         totalDelta = 0;
     }
@@ -72,7 +73,7 @@ public class Player extends GameEntity {
 
     private void updateSprite(float delta){
         sprite = (Sprite)animation.getKeyFrame(totalDelta);
-        sprite.setPosition(getX(), getY());
+        sprite.setPosition(getX() - sprite.getWidth()/2, getY() - sprite.getHeight()/2);
         sprite.setOriginCenter();
         sprite.setRotation(travelVector.angle());
         totalDelta += delta;
@@ -83,15 +84,16 @@ public class Player extends GameEntity {
 
     private void updateActor() {
         currentLocation.set(getX(), getY());
-        GameLoopFactory.getMainGameLoop().updateCamera(currentLocation);
+        AbstractScreen.CameraManager.updateCamera(currentLocation);
     }
 
     //-------- Your Update Loops ------------------------------------------------------
     @Override
     public void act(float delta) {
         move();
-        updateActor();
+
         updateSprite(delta);
+        updateActor();
         super.act(delta);
     }
 
