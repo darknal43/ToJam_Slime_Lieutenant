@@ -81,9 +81,9 @@ public class TitleScreen extends AbstractScreen implements Constants {
         disposables.add(texture);
 
         float realWidth = (WIDTH - texture.getWidth()*SCALE)/2;
-        float realHeight = (HEIGHT - texture.getHeight()*SCALE)/2;
+        float realHeight = (HEIGHT - texture.getHeight()*SCALE)/2 + 100*SCALE;
 
-        magentaTitle.setBounds(realWidth, realHeight, texture.getWidth() * SCALE, texture.getHeight() * SCALE);
+        magentaTitle.setBounds(realWidth, realHeight , texture.getWidth() * SCALE, texture.getHeight() * SCALE);
 
         greenTitle = new Image(texture = new Texture("menuTitle\\mainTitleGreen.png"));
         disposables.add(texture);

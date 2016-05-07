@@ -17,20 +17,34 @@ import tools.WorldFactory;
  */
 public class GameScreen extends AbstractScreen{
 
+
     @Override
     protected void subclassInit() {
+        initiateBackground();
 
+        initPlayer();
+
+    }
+
+    private void initPlayer(){
         GameEntity mainPlayer;
+
+        stage.addActor(mainPlayer = new Player());
+        stage.setKeyboardFocus(mainPlayer);
+
+        ((OrthographicCamera)stage.getCamera()).zoom = 1F;
+
+    }
+
+    private void initiateBackground(){
         Texture tex;
         Image image;
         image = new Image(tex = new Texture("BackgroundConcepts\\granit_texture4410.jpg"));
-        stage.addActor(image);
-        stage.addActor(mainPlayer = new Player("badlogic.jpg"));
-        stage.setKeyboardFocus(mainPlayer);
         image.setPosition(0, 0);
-        ((OrthographicCamera)stage.getCamera()).zoom = 1F;
         disposables.add(tex);
+        stage.addActor(image);
     }
+
 
 
     @Override
@@ -50,9 +64,6 @@ public class GameScreen extends AbstractScreen{
 
     }
 
-    /**
-     * This is an internal static CameraManager class
-     */
     static public class CameraManager extends InputAdapter {
         static InputAdapter inputManager;
         private static OrthographicCamera getCamera(){

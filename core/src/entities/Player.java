@@ -11,6 +11,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Array;
+import driver.GameLoop;
+import server.models.GameModel;
 import state.screens.GameScreen;
 import tools.Constants;
 
@@ -20,33 +23,48 @@ import tools.Constants;
  */
 public class Player extends GameEntity {
     private InputHandler inputHandler;
-    private Vector2 currentLocation;
-    private Vector2 targetLocation;
-    private Animation animation;
-    private Animation specialEffects;
+
+
+    private static Animation animation;
+    private static Animation specialEffects;
 
     //TODO Adjust this value based on size?
     private float speed = 10;
 
     private float totalDelta;
 
-    public Player(String spriteFilePath){
-        super(spriteFilePath);
+
+
+
+    private static void initiatePlayerAnimation(){
+        if (animation != null) return;
+
         TextureAtlas textureAtlas = new TextureAtlas("player\\baseAnimation-packed\\pack.atlas");
 
-        this.assets = textureAtlas.createSprites();
+        GameLoop.StaticDisposables.addDisposable(textureAtlas);
+        Array<Sprite> assets = textureAtlas.createSprites();
 
         animation = new Animation(1F/12, assets);
         animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
-        totalDelta = 0;
+
+
     }
+
+    private void initiateSprite(){
+        totalDelta = 0;
+
+        sprite = (Sprite)animation.getKeyFrame(totalDelta);
+
+        sprite.setColor(1, 0, 0, 1);
+    }
+
 
     @Override
     protected void init() {
         super.init();
         inputHandler = new InputHandler(this);
-        currentLocation = new Vector2(getX(), getY());
-        targetLocation = new Vector2().setToRandomDirection();
+        initiatePlayerAnimation();
+        initiateSprite();
     }
 
 
@@ -62,8 +80,20 @@ public class Player extends GameEntity {
     }
 
 
-    private void move(){
 
+
+    //-------- Your Update Loops ------------------------------------------------------
+    @Override
+    public void act(float delta) {
+        move();
+        updateSprite(delta);
+        updateActor();
+        super.act(delta);
+    }
+
+
+
+    private void move(){
         travelVector.setLength(speed);
         this.addAction(Actions.moveBy(travelVector.x, travelVector.y, 1));
 
@@ -71,7 +101,7 @@ public class Player extends GameEntity {
 
     private void updateSprite(float delta){
         sprite = (Sprite)animation.getKeyFrame(totalDelta);
-        sprite.setPosition(getX() - sprite.getWidth()/2, getY() - sprite.getHeight()/2);
+        sprite.setPosition(getX() - sprite.getWidth() / 2, getY() - sprite.getHeight() / 2);
         sprite.setOriginCenter();
         sprite.setRotation(travelVector.angle());
         totalDelta += delta;
@@ -85,25 +115,12 @@ public class Player extends GameEntity {
         GameScreen.CameraManager.updateCamera(currentLocation);
     }
 
-    //-------- Your Update Loops ------------------------------------------------------
-    @Override
-    public void act(float delta) {
-        move();
+    public void setMouseLocation(float x, float y){
+        targetLocation = new Vector2(x, y);
 
-        updateSprite(delta);
-        updateActor();
-        super.act(delta);
+        travelVector = targetLocation.sub(currentLocation);
     }
 
-
-
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-
-        sprite.draw(batch);
-    }
 
     //------------------------------------------------------------------------------------
 
@@ -113,12 +130,24 @@ public class Player extends GameEntity {
         return super.remove();
     }
 
+    @Override
+    public void serverUpdate() {
 
-    public void setMouseLocation(float x, float y){
-        targetLocation = new Vector2(x, y);
-
-        travelVector = targetLocation.sub(currentLocation);
     }
+
+    @Override
+    public GameModel getModel() {
+        return null;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        sprite.draw(batch);
+    }
+
+
 
 
 }

@@ -37,6 +37,7 @@ public abstract class AbstractScreen implements Screen, Constants {
         disposables = new Array<>();
         world = WorldFactory.getWorld();
         inputMultiplexer = new InputMultiplexer();
+
     }
 
 
@@ -45,12 +46,6 @@ public abstract class AbstractScreen implements Screen, Constants {
     private void init(){
         disposables.clear();
         stage = new Stage(){
-            @Override
-            public boolean scrolled(int amount) {
-                System.out.println(amount);
-
-                return super.scrolled(amount);
-            }
 
             @Override
             public boolean mouseMoved(int screenX, int screenY) {
@@ -150,7 +145,6 @@ public abstract class AbstractScreen implements Screen, Constants {
     public Stage getStage(){
         return stage;
     }
-
 
 
 
