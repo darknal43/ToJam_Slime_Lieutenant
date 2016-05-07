@@ -1,13 +1,8 @@
 package tools.ServerTools.generators;
 
-import server.model.media.*;
-import server.model.serverKey.MServerKey;
-import server.model.social.*;
-import server.model.soundCloud.MBand;
-import server.model.soundCloud.MMusicAlbum;
-import server.model.soundCloud.MMusicPost;
-import server.model.soundCloud.MPlaylist;
-import server.model.user.*;
+
+import server.models.PlayerModel;
+import server.models.ProjectileModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,29 +30,8 @@ public enum Tags {
      */
     Tags(){
         classes = new String[]{
-                User.class.getName(),
-                UserActivityLog.class.getName(),
-                UserDiaryContent.class.getName(),
-                UserConversations.class.getName(),
-                UserProfile.class.getName(),
-                UserUploadedContent.class.getName(),
-                MBand.class.getName(),
-                MMusicAlbum.class.getName(),
-                MMusicPost.class.getName(),
-                MPlaylist.class.getName(),
-                MAudio.class.getName(),
-                MHashtag.class.getName(),
-                MImage.class.getName(),
-                MMusic.class.getName(),
-                MText.class.getName(),
-                MComment.class.getName(),
-                MConversation.class.getName(),
-                MDiaryPost.class.getName(),
-                MGenericPost.class.getName(),
-                MGroup.class.getName(),
-                MMessage.class.getName(),
-                MPost.class.getName(),
-                MServerKey.class.getName()
+                ProjectileModel.class.getName(),
+                PlayerModel.class.getName()
         };
 
         Map<Integer, String> tag = new HashMap<>();
