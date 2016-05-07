@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import tools.Constants;
 import tools.WorldFactory;
+
+import java.util.Vector;
 
 /**
  * This is the primary screen superclass.
@@ -28,7 +31,6 @@ public abstract class AbstractScreen implements Screen, Constants {
 
     protected Array<Disposable> disposables;
 
-    private Viewport viewport;
 
     public AbstractScreen(){
         disposables = new Array<>();
@@ -74,8 +76,6 @@ public abstract class AbstractScreen implements Screen, Constants {
      * All drawing should be done here.
      */
     protected void draw() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
 
@@ -96,9 +96,9 @@ public abstract class AbstractScreen implements Screen, Constants {
 
     @Override
     public void render(float delta) {
+
         draw();
         update(delta);
-
     }
 
     @Override
@@ -134,5 +134,10 @@ public abstract class AbstractScreen implements Screen, Constants {
         for (Disposable disposable : disposables){
             disposable.dispose();
         }
+    }
+
+    public void updateCamera(Vector2 travelVector) {
+        stage.getCamera().position.lerp(new Vector3(travelVector, 0), 0.2F);
+
     }
 }

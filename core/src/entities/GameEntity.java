@@ -84,7 +84,7 @@ public abstract class GameEntity extends Actor {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1;
+        fixtureDef.density = 0;
 
 
         body.createFixture(fixtureDef);

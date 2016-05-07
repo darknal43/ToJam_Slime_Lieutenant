@@ -3,10 +3,14 @@ package entities;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import driver.GameLoop;
+import driver.GameLoopFactory;
 import tools.Constants;
 
 /**
@@ -14,14 +18,11 @@ import tools.Constants;
  * Created by Hongyu Wang on 5/5/2016.
  */
 public class Player extends GameEntity {
-    private float mouseX, mouseY;
     private InputHandler inputHandler;
-
-
+    private Vector2 targetVector;
 
     public Player(String spriteFilePath){
         super(spriteFilePath);
-
 
 
 
@@ -31,8 +32,7 @@ public class Player extends GameEntity {
     protected void init() {
         super.init();
         inputHandler = new InputHandler(this);
-        mouseX = getX();
-        mouseY = getY();
+        targetVector = new Vector2().setToRandomDirection().setLength(100);
     }
 
 
@@ -49,14 +49,27 @@ public class Player extends GameEntity {
 
 
 
+    private void updateActorInfo(){
+
+
+
+
+        body.setLinearVelocity(targetVector);
+        setPosition(body.getPosition().x + sprite.getWidth() / 2, body.getPosition().y + sprite.getHeight() / 2);
+
+        GameLoopFactory.getMainGameLoop().updateCamera(new Vector2(getX(), getY()));
+        
+
+        sprite.setPosition(body.getPosition().x, body.getPosition().y);
+
+
+    }
 
     //-------- Your Update Loops ------------------------------------------------------
     @Override
     public void act(float delta) {
         super.act(delta);
-        sprite.setX(getX());
-        sprite.setY(getY());
-        //System.out.println(this.getClass()+"-> " + mouseX + " " + mouseY);
+        updateActorInfo();
     }
 
 
@@ -78,8 +91,8 @@ public class Player extends GameEntity {
 
 
     public void setMouseLocation(float x, float y){
-        this.mouseX = x;
-        this.mouseY = y;
+        targetVector = new Vector2(x - getX(), y - getY()).setLength(1000);
+
     }
 
 
@@ -113,7 +126,7 @@ class InputHandler implements Constants {
         //This handles keyboard commands
         if (event.getType() == InputEvent.Type.keyDown){
             switch (event.getKeyCode()){
-                //This is
+                //This is the shoot command XD.
                 case Input.Keys.SPACE : player.shoot();
                     return true;
 
