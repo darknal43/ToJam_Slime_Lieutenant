@@ -1,7 +1,11 @@
 package server.serverside;
 
-import tools.ServerTools.databases.EventHandler;
+import entities.GameEntity;
+import tools.ServerTools.databases.VirtualDatabase;
 import tools.ServerTools.databases.VirtualDatabaseFactory;
+import tools.Utils;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Hairuo on 2016-05-06.
@@ -9,14 +13,40 @@ import tools.ServerTools.databases.VirtualDatabaseFactory;
 public class ServerSideGame{
 
     private boolean running;
-    private EventHandler data;
+    private VirtualDatabase data;
+    private ConcurrentHashMap<Long, GameEntity> actorMap;
 
     public ServerSideGame(){
         this.running = true;
+        this.actorMap = Utils.newConcurrentMap();
         data = VirtualDatabaseFactory.createVirtualDatabase();
     }
 
     public void update(){
 
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public VirtualDatabase getData() {
+        return data;
+    }
+
+    public void setData(VirtualDatabase data) {
+        this.data = data;
+    }
+
+    public ConcurrentHashMap<Long, GameEntity> getActorMap() {
+        return actorMap;
+    }
+
+    public void setActorMap(ConcurrentHashMap<Long, GameEntity> actorMap) {
+        this.actorMap = actorMap;
     }
 }

@@ -1,7 +1,10 @@
 package tools.ServerTools.databases;
 
+import entities.Player;
 import server.models.GameModel;
+import server.models.PlayerModel;
 import tools.ServerTools.generators.SerialGenerator;
+import tools.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -13,12 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by Kevin Zheng on 2016-03-09.
  */
 public class VirtualDatabase {
-    public Map<Long, GameModel> data;
-    private Map<String, Long> hashtag_key;
-    private Map<String, Long> username_key;
-    private List<Long> updatedKeys;
-    public SerialGenerator generator = SerialGenerator.getGenerator();
-    public SerialGenerator HVGenerator = SerialGenerator.getHGenerator(1000);
+    private Map<Long, GameModel> data;
+    private SerialGenerator generator = SerialGenerator.getGenerator();
+    private PlayerModel availablePlayer;
 
     public VirtualDatabase(){
         init();
@@ -26,15 +26,8 @@ public class VirtualDatabase {
 
     public void init()
     {
-        this.username_key = new ConcurrentHashMap<>();
-        this.hashtag_key = new ConcurrentHashMap<>();
-        this.data = new ConcurrentHashMap<>();
-        this.updatedKeys = new ArrayList<>();
+        this.data = Utils.newConcurrentMap();
     }
-
-
-
-
 
     /**Gets a model from the database.
      *
@@ -43,6 +36,10 @@ public class VirtualDatabase {
      */
     public GameModel getModel(long key){
         return data.get(key);
+    }
+
+    public void addModel(GameModel model){
+        data.put(model.getKey(), model);
     }
 
     /**Sets a model into the database.
@@ -87,12 +84,7 @@ public class VirtualDatabase {
         }
 
         data.put(newModel.getKey(), newModel);
-        updatedKeys.add(newModel.getKey());
 
-    }
-
-    public List<Long> getUpdatedKeys() {
-        return updatedKeys;
     }
 
     private <T> List<T> union(List<T> list1, List<T> list2) {
@@ -108,4 +100,7 @@ public class VirtualDatabase {
         return data;
     }
 
+    public PlayerModel getAvailablePlayer() {
+        return availablePlayer;
+    }
 }

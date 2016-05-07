@@ -3,6 +3,7 @@ package server.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import server.event.*;
 import server.models.GameModel;
+import server.models.PlayerModel;
 import server.serverside.GameFactory;
 import server.serverside.ServerSideGame;
 import tools.ServerTools.databases.VirtualDatabase;
@@ -155,6 +156,50 @@ public class WebService {
             ObjectMapper objectMapper = new ObjectMapper();
             int[] values = objectMapper.readValue(json, int[].class);
             eventHandler.add(new FireEvent(values));
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @POST
+    @Path("/createPlayer")
+    @Consumes("*/*")
+    public Response createPlayer(String json){
+
+        EventHandler eventHandler = EventHandlerFactory.createEventHandler();
+
+        try{
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            PlayerModel newPlayer = objectMapper.readValue(json, PlayerModel.class);
+            eventHandler.add(new CreatePlayerEvent(newPlayer));
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @POST
+    @Path("/leaveGame")
+    @Consumes("*/*")
+    public Response leaveGame(String json){
+
+        EventHandler eventHandler = EventHandlerFactory.createEventHandler();
+
+        try{
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            PlayerModel newPlayer = objectMapper.readValue(json, PlayerModel.class);
+            eventHandler.add(new LeaveGameEvent(newPlayer));
 
         }catch (Exception e){
 

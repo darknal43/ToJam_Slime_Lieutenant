@@ -10,9 +10,10 @@ import tools.ServerTools.databases.VirtualDatabaseFactory;
 public class MoveEvent extends Event {
     private float xTar;
     private float yTar;
+    Player player;
 
     public MoveEvent(int[] data) {
-        super(data[0]);
+        super();
         this.xTar = data[1];
         this.yTar = data[2];
 

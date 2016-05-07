@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Hairuo on 2016-05-06.
@@ -59,5 +60,9 @@ public class Utils {
 
     public static <K, V> Map<K, V> newMap(){
         return new Hashtable<K, V>();
+    }
+
+    public static <K, V> ConcurrentHashMap<K, V> newConcurrentMap(){
+        return new ConcurrentHashMap<>();
     }
 }
